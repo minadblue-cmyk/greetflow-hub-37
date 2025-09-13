@@ -334,13 +334,26 @@ export function GreetingManager() {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
-      console.log('[GreetingsPage] Apply response:', result);
+      console.log('[GreetingsPage] Apply response status:', response.status);
+      
+      let result: any;
+      try {
+        const text = await response.text();
+        console.log('[GreetingsPage] Apply response text:', text);
+        result = text ? JSON.parse(text) : {};
+      } catch {
+        result = { success: response.ok };
+      }
+      
+      console.log('[GreetingsPage] Apply response parsed:', result);
 
-      if (result.ok) {
+      // Considera sucesso se: response ok OU result.ok OU result.success OU status 200
+      const isSuccess = response.ok || result.ok === true || result.success === true || response.status === 200;
+      
+      if (isSuccess) {
         toast({ title: 'Saudação aplicada', description: 'A saudação foi aplicada ao agente com sucesso.' });
       } else {
-        throw new Error(result.message || 'Erro ao aplicar saudação');
+        throw new Error(result.message || result.error || 'Erro ao aplicar saudação');
       }
     } catch (error) {
       console.error('[GreetingsPage] Apply error:', error);
