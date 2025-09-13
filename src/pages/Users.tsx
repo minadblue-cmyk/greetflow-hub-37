@@ -4,9 +4,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Users as UsersIcon, UserPlus, AlertCircle } from 'lucide-react';
 import { UserList } from '@/components/users/UserList';
 import { CreateUserForm } from '@/components/users/CreateUserForm';
+import { EditUserForm } from '@/components/users/EditUserForm';
+
+interface User {
+  id: string;
+  email: string;
+  nome: string;
+  tipo: string;
+  ativo: boolean;
+  empresa: string;
+  empresa_id: string;
+  plano: string;
+  created_at: string;
+}
 
 export default function Users() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   return (
     <div className="p-6 space-y-8">
@@ -55,8 +70,8 @@ export default function Users() {
       <UserList 
         refreshTrigger={refreshTrigger}
         onEditUser={(user) => {
-          // TODO: Implementar edição de usuário
-          console.log('Edit user:', user);
+          setSelectedUser(user);
+          setIsEditModalOpen(true);
         }}
       />
 
@@ -65,6 +80,16 @@ export default function Users() {
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
         onUserCreated={() => {
+          setRefreshTrigger(prev => prev + 1);
+        }}
+      />
+
+      {/* Edit User Modal */}
+      <EditUserForm
+        user={selectedUser}
+        open={isEditModalOpen}
+        onOpenChange={setIsEditModalOpen}
+        onUserUpdated={() => {
           setRefreshTrigger(prev => prev + 1);
         }}
       />

@@ -44,6 +44,7 @@ export const WEBHOOKS: WebhookCfg[] = [
   { id:'webhook-editar-perfil',             name:'Webhook Editar Perfil',                    url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/edit-profile' },
   { id:'webhook-listar-perfil',             name:'Webhook Listar Perfil',                    url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/list-profile' },
   { id:'webhook-deletar-perfil',            name:'Webhook Deletar Perfil',                   url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/delete-profile' },
+  { id:'delete-users',                      name:'Webhook Deletar Usuário',                 url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/delete-users' },
 
   { id:'webhook-login',                     name:'Webhook Login',                            url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/login' },
   { id:'webhook-me',                        name:'Webhook Me',                               url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/me' },

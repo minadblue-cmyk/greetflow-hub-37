@@ -4,9 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { callWebhook } from '@/utils/webhooks';
-import { Users, Edit, Trash2, RefreshCw } from 'lucide-react';
+import { Users, Edit, Trash2, RefreshCw, Search } from 'lucide-react';
 
 interface User {
   id: string;
@@ -27,6 +28,8 @@ interface UserListProps {
 
 export function UserList({ onEditUser, refreshTrigger = 0 }: UserListProps) {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
@@ -43,6 +46,7 @@ export function UserList({ onEditUser, refreshTrigger = 0 }: UserListProps) {
       if (response.success && response.data) {
         const userData = Array.isArray(response.data) ? response.data : response.data.users || [];
         setUsers(userData);
+        setFilteredUsers(userData);
       } else {
         throw new Error('Erro ao carregar usuários');
       }
@@ -72,12 +76,45 @@ export function UserList({ onEditUser, refreshTrigger = 0 }: UserListProps) {
   };
 
   const handleDeleteUser = async (userId: string) => {
-    // TODO: Implementar delete quando webhook estiver disponível
-    toast({
-      title: 'Funcionalidade em desenvolvimento',
-      description: 'A exclusão de usuários será implementada em breve.',
-    });
+    try {
+      const response = await callWebhook('delete-users', {
+        method: 'POST',
+        body: JSON.stringify({ userId })
+      });
+
+      if (response.success) {
+        toast({
+          title: 'Sucesso',
+          description: 'Usuário excluído com sucesso.',
+        });
+        loadUsers(); // Refresh the list
+      } else {
+        throw new Error(response.error || 'Erro ao excluir usuário');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir usuário:', error);
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível excluir o usuário.',
+        variant: 'destructive',
+      });
+    }
   };
+
+  // Filter users based on search term
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredUsers(users);
+    } else {
+      const filtered = users.filter(user =>
+        user.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.empresa.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.tipo.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchTerm, users]);
 
   if (isLoading) {
     return (
@@ -135,7 +172,7 @@ export function UserList({ onEditUser, refreshTrigger = 0 }: UserListProps) {
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Usuários do Sistema ({users.length})
+            Usuários
           </div>
           <Button onClick={loadUsers} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
@@ -144,9 +181,19 @@ export function UserList({ onEditUser, refreshTrigger = 0 }: UserListProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {/* Search Field */}
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar usuários por nome, email, empresa ou tipo..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
         <ScrollArea className="h-[400px]">
           <div className="space-y-4">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <div
                 key={user.id}
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/20 transition-colors"
@@ -185,6 +232,12 @@ export function UserList({ onEditUser, refreshTrigger = 0 }: UserListProps) {
               </div>
             ))}
             
+            {filteredUsers.length === 0 && users.length > 0 && searchTerm && (
+              <div className="text-center text-muted-foreground py-8">
+                Nenhum usuário encontrado para "{searchTerm}"
+              </div>
+            )}
+
             {users.length === 0 && (
               <div className="text-center text-muted-foreground py-8">
                 Nenhum usuário encontrado
