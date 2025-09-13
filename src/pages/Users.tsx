@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users as UsersIcon, UserPlus, AlertCircle } from 'lucide-react';
+import { UserList } from '@/components/users/UserList';
+import { CreateUserForm } from '@/components/users/CreateUserForm';
 
 export default function Users() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   return (
     <div className="p-6 space-y-8">
       {/* Header */}
@@ -15,7 +19,10 @@ export default function Users() {
           </p>
         </div>
         
-        <Button className="button-primary">
+        <Button 
+          className="button-primary"
+          onClick={() => setIsCreateModalOpen(true)}
+        >
           <UserPlus className="h-4 w-4 mr-2" />
           Criar Usuário
         </Button>
@@ -44,19 +51,23 @@ export default function Users() {
         </CardContent>
       </Card>
 
-      {/* Placeholder Content */}
-      <Card className="card-gradient">
-        <CardContent className="p-12 text-center">
-          <UsersIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium mb-2">Sistema de Usuários</h3>
-          <p className="text-muted-foreground mb-4">
-            Os componentes UserList, UserProfileDialog e CreateUserForm serão implementados aqui.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Configure os webhooks necessários para ativar a funcionalidade completa.
-          </p>
-        </CardContent>
-      </Card>
+      {/* User List */}
+      <UserList 
+        refreshTrigger={refreshTrigger}
+        onEditUser={(user) => {
+          // TODO: Implementar edição de usuário
+          console.log('Edit user:', user);
+        }}
+      />
+
+      {/* Create User Modal */}
+      <CreateUserForm
+        open={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+        onUserCreated={() => {
+          setRefreshTrigger(prev => prev + 1);
+        }}
+      />
     </div>
   );
 }

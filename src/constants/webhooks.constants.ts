@@ -23,8 +23,8 @@ export const WEBHOOKS: WebhookCfg[] = [
   { id:'webhook-criar-empresa',             name:'Webhook Criar Empresa',                    url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/create-company' },
   { id:'webhook-editar-empresa',            name:'Webhook Editar Empresa',                   url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/edit-company' },
   { id:'webhook-editar-usuarios',           name:'Webhook Editar Usuários',                  url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/edit-users' },
-  { id:'webhook-listar-usuarios',           name:'Webhook Listar Usuários',                  url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/list-users' },
-  { id:'List Company',                      name:'Webhook Listar Empresas',                  url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/empresas' },
+  { id:'list-users',                        name:'Webhook Listar Usuários',                  url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/list-users' },
+  { id:'list-company',                      name:'Webhook Listar Empresas',                  url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/list-company' },
   { id:'webhook-usuarios-empresa',          name:'Webhook Usuários por Empresa',             url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/usuarios-empresa' },
 
   { id:'webhook-atualizar-perfil',          name:'Webhook Atualizar Perfil Usuário',         url:'https://n8n-lavo-n8n.l5gxno.easypanel.host/webhook/atualizar-perfil' },
@@ -58,10 +58,10 @@ export const DEFAULT_WEBHOOKS: Record<string, string> = WEBHOOKS.reduce((acc, we
 // Synonym mappings for fallback resolution
 export const WEBHOOK_SYNONYMS: Record<string, string[]> = {
   // Empresas
-  companies: ['List Company', 'webhook-listar-empresas', 'list-company'],
+  companies: ['list-company'],
   
   // Usuários
-  users: ['webhook-listar-usuarios', 'list-users'],
+  users: ['list-users'],
   'users-by-company': ['webhook-usuarios-empresa'],
   'edit-users': ['webhook-editar-usuarios', 'webhook-atualizar-usuario', 'update-user-info'],
   

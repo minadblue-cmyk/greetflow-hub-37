@@ -127,6 +127,65 @@ export function resetWebhookSettings(): void {
 }
 
 /**
+ * Call webhook with data and return response
+ */
+export async function callWebhook(
+  id: WebhookId, 
+  options: { method?: string; body?: string; headers?: Record<string, string> } = {}
+): Promise<{ success: boolean; data?: any; error?: string; status?: number }> {
+  const url = getWebhookUrl(id);
+  
+  if (!url) {
+    console.error(`[Webhooks.callWebhook] No URL found for webhook: ${id}`);
+    return {
+      success: false,
+      error: `Webhook ${id} não está configurado`
+    };
+  }
+
+  try {
+    console.log(`[Webhooks.callWebhook] Calling ${id} (${url}):`, options);
+    
+    const response = await fetch(url, {
+      method: options.method || 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      },
+      body: options.body
+    });
+
+    const responseText = await response.text();
+    let data: any;
+    
+    try {
+      data = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      data = { message: responseText };
+    }
+
+    console.log(`[Webhooks.callWebhook] Response from ${id}:`, {
+      status: response.status,
+      ok: response.ok,
+      data
+    });
+
+    return {
+      success: response.ok,
+      data,
+      status: response.status,
+      error: !response.ok ? `HTTP ${response.status}: ${data.message || responseText}` : undefined
+    };
+  } catch (error) {
+    console.error(`[Webhooks.callWebhook] Error calling ${id}:`, error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    };
+  }
+}
+
+/**
  * Test webhook URL with simple GET request
  */
 export async function testWebhookUrl(url: string): Promise<{ success: boolean; response?: any; error?: string }> {
