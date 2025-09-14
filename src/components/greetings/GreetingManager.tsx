@@ -418,12 +418,12 @@ export function GreetingManager() {
       console.log('[GreetingsPage] Delete response parsed:', result);
 
       const isSuccess = response.ok || result.ok === true || result.success === true || response.status === 200;
-
+      
       if (isSuccess) {
         toast({ title: 'Saudação removida', description: 'A saudação foi removida com sucesso.' });
         await fetchGreetings(); // Recarrega a lista
       } else {
-        throw new Error(result.message || result.error || 'Erro ao deletar saudação');
+        throw new Error(result.message || result.error || `HTTP ${response.status}: Erro ao deletar saudação`);
       }
     } catch (error) {
       console.error('[GreetingsPage] Delete error:', error);
