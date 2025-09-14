@@ -16,24 +16,20 @@ export const WEBHOOKS: WebhookCfg[] = [
   { id:'webhook-listar-saudacao',           name:'Webhook Listar Saudação',                  url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/listar-saudacao' },
   { id:'webhook-agente-recebimento',        name:'Webhook Agente de Recebimento',            url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/seleciona-saudacao' },
   { id:'webhook-agente-prospeccao-quente',  name:'Webhook Agente de Prospecção Lead Quente', url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/agente-prospeccao-quente' },
-  { id:'webhook-agente-prospeccao-frio',    name:'Webhook Agente de Prospecção Lead Frio',   url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/agente-prospeccao-frio' },
-  { id:'webhook-agente-prospeccao-quente-2',name:'Webhook Agente Prospecção Quente 2',       url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/agente-prospeccao-quente' },
-
+  
   { id:'webhook-criar-usuario',             name:'Webhook Criar Usuário',                    url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/create-user' },
   { id:'webhook-criar-empresa',             name:'Webhook Criar Empresa',                    url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/create-company' },
   { id:'webhook-editar-empresa',            name:'Webhook Editar Empresa',                   url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/edit-company' },
   { id:'webhook-editar-usuarios',           name:'Webhook Editar Usuários',                  url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/edit-users' },
   { id:'list-users',                        name:'Webhook Listar Usuários',                  url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/list-users' },
   { id:'list-company',                      name:'Webhook Listar Empresas',                  url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/list-company' },
-  { id:'webhook-usuarios-empresa',          name:'Webhook Usuários por Empresa',             url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/usuarios-empresa' },
-
-  { id:'webhook-atualizar-perfil',          name:'Webhook Atualizar Perfil Usuário',         url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/atualizar-perfil' },
-  { id:'webhook-reset-password',            name:'Webhook Reset Password',                   url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/reset-password' },
+ 
+   { id:'webhook-reset-password',            name:'Webhook Reset Password',                   url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/reset-password' },
   { id:'webhook-atualizar-data-vencimento', name:'Webhook Atualizar Data de Vencimento',     url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/update-due-date' },
 
   { id:'webhook-lista-prospeccao',          name:'Webhook Lista Prospecção (Leads)',         url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/lista-prospeccao' },
   { id:'webhook-remover-ultima-base',       name:'Webhook Remover Última Base Inserida',     url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/remove-last-base' },
-  { id:'webhook-mercado',                   name:'Webhook Mercado (Insert Excel)',           url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/mercado' },
+  { id:'webhook-upload',                   name:'Webhook Upload (Insert Excel)',           url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/upload' },
 
   { id:'webhook-deletar-saudacao',          name:'Webhook Deletar Saudação',                 url:'https://n8n-lavo-n8n.15gxno.easypanel.host/webhook/deletar-saudacao' },
   { id:'webhook-lead-updates',              name:'Webhook Atualizações de Leads (N8N→Frontend)', url:'https://webhook.site/4a8b9c1d-e2f3-4567-8901-23456789abcd' },
@@ -73,7 +69,7 @@ export const WEBHOOK_SYNONYMS: Record<string, string[]> = {
   dashboard: ['dashboard-title', 'dashboard_meta', 'webhook-dashboard-title'],
   
   // Upload
-  upload: ['webhook-mercado', 'upload-excel'],
+  upload: ['webhook-uoload', 'upload-excel'],
   
   // Agente
   agent: ['webhook-agente-prospeccao-quente-2', 'webhook-controle-agente', 'agent-start', 'agent-stop', 'agent-status', 'list-leads'],
