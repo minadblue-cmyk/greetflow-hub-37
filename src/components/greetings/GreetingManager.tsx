@@ -584,17 +584,19 @@ export function GreetingManager() {
                         <p className="text-sm line-clamp-3">{item.text}</p>
                       </div>
 
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={(e) => {
                             e.stopPropagation();
+                            console.log('[GreetingsPage] Apply button clicked for greeting:', item.text.substring(0, 50));
                             const idNum = typeof item.id === 'number' ? item.id : (parseInt(String(item.id ?? ''), 10) || index + 1);
                             handleApplyToAgent(item.text, idNum);
                           }}
                           disabled={isLoading || !webhooksConfigured}
                           className="h-8"
+                          title="Aplicar saudação ao agente"
                         >
                           <Send className="h-3 w-3" />
                         </Button>
@@ -604,9 +606,11 @@ export function GreetingManager() {
                           variant="outline"
                           onClick={(e) => {
                             e.stopPropagation();
+                            console.log('[GreetingsPage] Delete button clicked for greeting:', item.text.substring(0, 50));
                             handleDeleteGreeting(index);
                           }}
-                          className="h-8 text-destructive hover:text-destructive"
+                          className="h-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          title="Deletar saudação"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
