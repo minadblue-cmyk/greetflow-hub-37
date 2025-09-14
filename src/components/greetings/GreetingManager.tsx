@@ -367,10 +367,74 @@ export function GreetingManager() {
     }
   };
 
-  const handleDeleteGreeting = (index: number) => {
-    const newGreetings = savedGreetings.filter((_, i) => i !== index);
-    setSavedGreetings(newGreetings);
-    toast({ title: 'Saudação removida', description: 'A saudação foi removida da lista.' });
+  const handleDeleteGreeting = async (index: number) => {
+    const greeting = savedGreetings[index];
+    if (!greeting) return;
+
+    const webhookUrl = getWebhookUrl('webhook-deletar-saudacao');
+    if (!webhookUrl) {
+      toast({
+        title: 'Webhook não configurado',
+        description: 'Configure o webhook webhook-deletar-saudacao antes de prosseguir.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const ui = resolveUserInfo(user);
+      const payload = {
+        id: greeting.id || index + 1,
+        usuario_id: ui.usuario_id,
+        saudacao_id: greeting.id || index + 1,
+        saudacao: greeting.text,
+        nome: ui.nome,
+        email: ui.email,
+        tipo: ui.tipo,
+      };
+
+      console.log('[GreetingsPage] Deleting greeting:', webhookUrl);
+      console.log('[GreetingsPage] Delete payload:', payload);
+
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      console.log('[GreetingsPage] Delete response status:', response.status);
+
+      let result: any;
+      try {
+        const text = await response.text();
+        console.log('[GreetingsPage] Delete response text:', text);
+        result = text ? JSON.parse(text) : {};
+      } catch {
+        result = { success: response.ok };
+      }
+
+      console.log('[GreetingsPage] Delete response parsed:', result);
+
+      const isSuccess = response.ok || result.ok === true || result.success === true || response.status === 200;
+
+      if (isSuccess) {
+        toast({ title: 'Saudação removida', description: 'A saudação foi removida com sucesso.' });
+        await fetchGreetings(); // Recarrega a lista
+      } else {
+        throw new Error(result.message || result.error || 'Erro ao deletar saudação');
+      }
+    } catch (error) {
+      console.error('[GreetingsPage] Delete error:', error);
+      toast({
+        title: 'Erro ao deletar',
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const webhooksConfigured = !!(

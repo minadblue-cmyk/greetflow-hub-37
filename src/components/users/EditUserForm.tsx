@@ -81,22 +81,49 @@ export function EditUserForm({ user, open, onOpenChange, onUserUpdated }: EditUs
     const loadData = async () => {
       setIsLoadingData(true);
       try {
-        const [companiesResponse, profilesResponse] = await Promise.all([
-          callWebhook('list-company', { method: 'GET' }),
-          callWebhook('list-profile', { method: 'GET' })
-        ]);
+        // Load companies
+        const companiesResponse = await callWebhook('list-company', { 
+          method: 'POST',
+          body: JSON.stringify({}) 
+        });
+
+        console.log('Companies response:', companiesResponse);
 
         if (companiesResponse.success && companiesResponse.data) {
-          const companyData = Array.isArray(companiesResponse.data) 
-            ? companiesResponse.data 
-            : companiesResponse.data.companies || [];
+          let companyData = [];
+          
+          // Handle different response formats
+          if (Array.isArray(companiesResponse.data)) {
+            companyData = companiesResponse.data;
+          } else if (companiesResponse.data.companies && Array.isArray(companiesResponse.data.companies)) {
+            companyData = companiesResponse.data.companies;
+          } else if (companiesResponse.data.data && Array.isArray(companiesResponse.data.data)) {
+            companyData = companiesResponse.data.data;
+          }
+          
           setCompanies(companyData);
         }
 
+        // Load profiles
+        const profilesResponse = await callWebhook('list-profile', { 
+          method: 'POST',
+          body: JSON.stringify({}) 
+        });
+
+        console.log('Profiles response:', profilesResponse);
+
         if (profilesResponse.success && profilesResponse.data) {
-          const profileData = Array.isArray(profilesResponse.data) 
-            ? profilesResponse.data 
-            : profilesResponse.data.profiles || [];
+          let profileData = [];
+          
+          // Handle different response formats
+          if (Array.isArray(profilesResponse.data)) {
+            profileData = profilesResponse.data;
+          } else if (profilesResponse.data.profiles && Array.isArray(profilesResponse.data.profiles)) {
+            profileData = profilesResponse.data.profiles;
+          } else if (profilesResponse.data.data && Array.isArray(profilesResponse.data.data)) {
+            profileData = profilesResponse.data.data;
+          }
+          
           setProfiles(profileData);
         }
       } catch (error) {
