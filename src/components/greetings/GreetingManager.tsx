@@ -216,11 +216,11 @@ export function GreetingManager() {
       return;
     }
 
-    const webhookUrl = getWebhookUrl('webhook-salvar-saudacao');
+    const webhookUrl = getWebhookUrl('greeting-save');
     if (!webhookUrl) {
       toast({
         title: 'Webhook não configurado',
-        description: 'Configure o webhook webhook-salvar-saudacao antes de prosseguir.',
+        description: 'Configure o webhook greeting-save antes de prosseguir.',
         variant: 'destructive',
       });
       return;
@@ -371,11 +371,11 @@ export function GreetingManager() {
     const greeting = savedGreetings[index];
     if (!greeting) return;
 
-    const webhookUrl = getWebhookUrl('webhook-deletar-saudacao');
+    const webhookUrl = getWebhookUrl('greeting-delete');
     if (!webhookUrl) {
       toast({
         title: 'Webhook não configurado',
-        description: 'Configure o webhook webhook-deletar-saudacao antes de prosseguir.',
+        description: 'Configure o webhook greeting-delete antes de prosseguir.',
         variant: 'destructive',
       });
       return;
@@ -438,7 +438,7 @@ export function GreetingManager() {
   };
 
   const webhooksConfigured = !!(
-    getWebhookUrl('webhook-salvar-saudacao') &&
+    getWebhookUrl('greeting-save') &&
     getWebhookUrl('greeting-list') &&
     getWebhookUrl('greeting-apply')
   );
@@ -455,9 +455,10 @@ export function GreetingManager() {
                 <div>
                   <p className="text-sm font-medium">Webhooks necessários:</p>
                   <ul className="text-xs text-muted-foreground mt-1 space-y-1">
-                    <li>• webhook-salvar-saudacao (POST JSON): {'{ saudacao: string }'}</li>
+                    <li>• greeting-save (POST JSON): {'{ saudacao: string }'}</li>
                     <li>• greeting-list (POST): retorna Array&lt;string | {`{ saudacao: string }`}&gt;</li>
                     <li>• greeting-apply (POST JSON): {'{ saudacao: string }'}</li>
+                    <li>• greeting-delete (POST JSON): {'{ id: number, saudacao: string }'}</li>
                   </ul>
                 </div>
               </div>
